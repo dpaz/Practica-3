@@ -54,5 +54,38 @@
     pueda identificar de qué tipo es cada objeto sprite almacenado en
     el tablero de juegos, pues cada objeto sólo quiere comprobar si ha
     colisionado con objetos de cierto tipo, no con todos los objetos.
-
+{}
 */
+describe("Clase GameBoard",function(){
+
+  beforeEach(function(){
+    loadFixtures('index.html');
+
+    canvas = $('#game')[0];
+    expect(canvas).toExist();
+
+    ctx = canvas.getContext('2d');
+    expect(ctx).toBeDefined();
+    
+    var oldGame = Game;
+    });
+
+  afterEach(function(){
+    Game = oldGame;
+  }); 
+
+  it("Añade elementos a board",function(){
+    var board = new GameBoard();
+    spyOn(board,"add").andCallThrough();
+
+    var obj = new PlayerShip();
+
+
+    board.add(obj);
+
+
+    expect(board.add).toHaveBeenCalled();
+    expect(board.objects.length).toEqual(1);
+    expect(board.objects[0]).toBe(obj);
+  });
+});
