@@ -138,9 +138,36 @@ describe("Clase GameBoard",function(){
       expect(board.draw).toHaveBeenCalled();
       for(i=0;i<10;i++){
         expect(board.objects[i].draw).toHaveBeenCalled();
-        expect(board.objects[i].draw).toHaveBeenCalled();
+        expect(board.objects[i].step).toHaveBeenCalled();
       } 
     });
 
   });
+
+  it("Detecta overlap",function(){
+    var board = new GameBoard();
+
+    var objRef = {
+      x : 0,y : 0,
+      w : 10, h:10
+     };
+    var objC = {
+      x : 0,y : 0,
+      w : 10, h:10
+    };
+    var objNC = {
+      x : 30,y : 30,
+      w : 10, h:10
+    };
+
+    board.add(objRef);
+    board.add(objC);
+    board.add(objNC);
+
+    expect(board.overlap(objRef,objC)).toBeTruthy();
+    expect(board.overlap(objRef,objNC)).toBeFalsy();
+  
+  });
+
+  
 });
