@@ -1,5 +1,5 @@
 describe("Clase PlayerShip", function(){
-    // Una vez comenzado el juego deber· aparecer la nave del jugador en
+    // Una vez comenzado el juego deber√° aparecer la nave del jugador en
     // la parte inferior
 
     // La nave debera moverse a izquierda y derecha con las teclas de las
@@ -8,16 +8,16 @@ describe("Clase PlayerShip", function(){
     var canvas, ctx;
 
     beforeEach(function(){
-	loadFixtures('index.html');
+		loadFixtures('index.html');
 
-	canvas = $('#game')[0];
-	expect(canvas).toExist();
+		canvas = $('#game')[0];
+		expect(canvas).toExist();
 
-	ctx = canvas.getContext('2d');
-	expect(ctx).toBeDefined();
+		ctx = canvas.getContext('2d');
+		expect(ctx).toBeDefined();
 
-	oldGame = Game;
-	SpriteSheet.load (sprites,function(){});
+		oldGame = Game;
+		SpriteSheet.load (sprites,function(){});
     });
 
     afterEach(function(){
@@ -66,7 +66,7 @@ describe("Clase PlayerShip", function(){
 
  	miNave.step(1); // Hacemos como que ha pasado 1 segundo
 	// Tras step, con Game.keys['left'] == false y Game.keys['right'] == false, 
-        // no debe haberse movido, por lo que lo comparamos con la posiciÛn x 
+        // no debe haberse movido, por lo que lo comparamos con la posici√≥n x 
         // inicial de PlayerShip
 	expect(miNave.x).toEqual(Game.width/2 - miNave.w / 2);
 
@@ -85,12 +85,12 @@ describe("Clase PlayerShip", function(){
 	// Creamos un PlayerShip para testar
 	var miNave = new PlayerShip();
 
-        // La posiciÛn inicial es 
+        // La posici√≥n inicial es 
         //   Game.width/2 - this.w / 2 == 320/2 -37/2 == 160 - 17.5 = 141.5
 	// Si tenemos la tecla izquierda pulsada, yendo a velocidad miNave.maxVel, 
-        // tras 0.5s la posiciÛn x de la nave debe ser la posiciÛn X inicial menos
+        // tras 0.5s la posici√≥n x de la nave debe ser la posici√≥n X inicial menos
         // (miNave.maxVel * 0.5s)
-        // Como miNave.maxVel == 200, la posiciÛn despuÈs de 0.5s con la flecha
+        // Como miNave.maxVel == 200, la posici√≥n despu√©s de 0.5s con la flecha
         // izquierda pulsada ha de ser:
         //   141.5 - 200*0.5 == 41.5
 
@@ -98,7 +98,7 @@ describe("Clase PlayerShip", function(){
 	expect(miNave.x).toEqual(41.5);
 
 	// Ahora hacemos como que pulsamos la flecha izquierda durante 2s. La nave
-        // ha de llegar hasta la izquierda del todo, por tanto la posiciÛn x ser· el
+        // ha de llegar hasta la izquierda del todo, por tanto la posici√≥n x ser√° el
         // extremo izquierdo: x == 0
  	miNave.step(2); // Hacemos como que ha pasado 2s
 	expect(miNave.x).toEqual(0);
@@ -116,12 +116,12 @@ describe("Clase PlayerShip", function(){
 	var miNave = new PlayerShip();
 
 
-        // La posiciÛn inicial es 
+        // La posici√≥n inicial es 
         //   Game.width/2 - this.w / 2 == 320/2 -37/2 == 160 - 17.5 = 141.5
 	// Si tenemos la tecla derecha pulsada, yendo a velocidad miNave.maxVel, 
-        // tras 0.5s la posiciÛn x de la nave debe ser la posiciÛn X inicial m·s
+        // tras 0.5s la posici√≥n x de la nave debe ser la posici√≥n X inicial m√°s
         // (miNave.maxVel * 0.5s)
-        // Como miNave.maxVel == 200, la posiciÛn despuÈs de 0.5s con la flecha
+        // Como miNave.maxVel == 200, la posici√≥n despu√©s de 0.5s con la flecha
         // izquierda pulsada ha de ser:
         //   141.5 + 200*0.5 == 241.5
 
@@ -130,8 +130,8 @@ describe("Clase PlayerShip", function(){
 
 
 	// Ahora hacemos como que pulsamos la flecha derecha durante 2s. La nave
-        // ha de llegar hasta la derecha del todo, por tanto la posiciÛn x ser· el
-        // lÌmite derecha, menos el ancho de la nave, es decir, Game.width - 37
+        // ha de llegar hasta la derecha del todo, por tanto la posici√≥n x ser√° el
+        // l√≠mite derecha, menos el ancho de la nave, es decir, Game.width - 37
  	miNave.step(2); // Hacemos como que ha pasado 0.5s
 	expect(miNave.x).toEqual(Game.width - 37);
 

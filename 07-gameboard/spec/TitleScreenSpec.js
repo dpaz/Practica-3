@@ -11,15 +11,15 @@ describe("Clase TitleScreen", function(){
     var canvas, ctx;
 
     beforeEach(function(){
-	loadFixtures('index.html');
+		loadFixtures('index.html');
 
-	canvas = $('#game')[0];
-	expect(canvas).toExist();
+		canvas = $('#game')[0];
+		expect(canvas).toExist();
 
-	ctx = canvas.getContext('2d');
-	expect(ctx).toBeDefined();
-	
-	oldGame = Game;
+		ctx = canvas.getContext('2d');
+		expect(ctx).toBeDefined();
+		
+		oldGame = Game;
     });
 
     afterEach(function(){

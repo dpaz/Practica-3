@@ -8,17 +8,17 @@ describe("Clase Starfield", function(){
     var canvas, ctx;
 
     beforeEach(function(){
-	// Hemos enlazado en jasmine/spec/javascript/fixtures el fichero index.html
-	loadFixtures('index.html');
+    	// Hemos enlazado en jasmine/spec/javascript/fixtures el fichero index.html
+    	loadFixtures('index.html');
 
-	canvas = $('#game')[0];
-	expect(canvas).toExist();
+    	canvas = $('#game')[0];
+    	expect(canvas).toExist();
 
-	ctx = canvas.getContext('2d');
-	expect(ctx).toBeDefined();
+    	ctx = canvas.getContext('2d');
+    	expect(ctx).toBeDefined();
 
-	oldGame = Game;
-	Game = {width: 320, height: 480};
+    	oldGame = Game;
+    	Game = {width: 320, height: 480};
 
     });
 

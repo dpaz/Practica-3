@@ -57,33 +57,28 @@
 {}
 */
 describe("Clase GameBoard",function(){
-
   beforeEach(function(){
     loadFixtures('index.html');
-
     canvas = $('#game')[0];
     expect(canvas).toExist();
-
     ctx = canvas.getContext('2d');
     expect(ctx).toBeDefined();
-    
-    var oldGame = Game;
-    });
+    oldGame = Game;
+    Game = {width: 320, height: 480};
 
+  });
   afterEach(function(){
     Game = oldGame;
-  }); 
+  });
 
   it("Añade elementos a board",function(){
     var board = new GameBoard();
+
     spyOn(board,"add").andCallThrough();
 
-    var obj = new PlayerShip();
-
+    var obj = new Object;
 
     board.add(obj);
-
-
     expect(board.add).toHaveBeenCalled();
     expect(board.objects.length).toEqual(1);
     expect(board.objects[0]).toBe(obj);
@@ -94,9 +89,8 @@ describe("Clase GameBoard",function(){
     spyOn(board,"remove").andCallThrough();
     spyOn(board,"finalizeRemoved").andCallThrough();
     spyOn(board,"resetRemoved").andCallThrough();
+    var obj = new Object;
 
-    var obj = new PlayerShip();
-    
     board.add(obj);
     board.resetRemoved();
     board.remove(obj);
@@ -108,10 +102,45 @@ describe("Clase GameBoard",function(){
     board.finalizeRemoved();
 
     expect(board.finalizeRemoved).toHaveBeenCalled();
-
     board.resetRemoved();
     expect(board.resetRemoved.calls.length).toEqual(2);
     expect(board.removed.length).toEqual(0);
   });
 
+
+  it("Usa draw y step de los elementos",function(){
+    
+    function obj(){
+      this.step = function (){};
+      this.draw = function (){}
+    }
+
+    var board = new GameBoard();
+
+    spyOn(board,"draw").andCallThrough();
+    spyOn(board,"step").andCallThrough();
+
+    Game = oldGame;
+    for(i=0;i<10;i++){
+      board.add(new obj);
+      spyOn(board.objects[i],"draw");
+      spyOn(board.objects[i],"step");
+    }
+    
+    
+
+    Game.initialize("game",sprites,function(){});  
+    Game.setBoard(1,board);
+
+    waits(100);
+    runs(function(){
+      expect(board.step).toHaveBeenCalled();
+      expect(board.draw).toHaveBeenCalled();
+      for(i=0;i<10;i++){
+        expect(board.objects[i].draw).toHaveBeenCalled();
+        expect(board.objects[i].draw).toHaveBeenCalled();
+      } 
+    });
+
+  });
 });
