@@ -88,4 +88,30 @@ describe("Clase GameBoard",function(){
     expect(board.objects.length).toEqual(1);
     expect(board.objects[0]).toBe(obj);
   });
+
+  it("Elimina elementos a board",function(){
+    var board = new GameBoard();
+    spyOn(board,"remove").andCallThrough();
+    spyOn(board,"finalizeRemoved").andCallThrough();
+    spyOn(board,"resetRemoved").andCallThrough();
+
+    var obj = new PlayerShip();
+    
+    board.add(obj);
+    board.resetRemoved();
+    board.remove(obj);
+
+    expect(board.remove).toHaveBeenCalled();
+    expect(board.removed.length).toEqual(1);
+    expect(board.removed[0]).toBe(obj);
+
+    board.finalizeRemoved();
+
+    expect(board.finalizeRemoved).toHaveBeenCalled();
+
+    board.resetRemoved();
+    expect(board.resetRemoved.calls.length).toEqual(2);
+    expect(board.removed.length).toEqual(0);
+  });
+
 });
