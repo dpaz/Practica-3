@@ -169,5 +169,33 @@ describe("Clase GameBoard",function(){
   
   });
 
-  
+  it("Detecta colisiones",function(){
+
+    var board = new GameBoard();
+
+    var objRef = {
+      x : 0,y : 0,
+      w : 10, h:10,
+      type: 0
+     };
+    var objC = {
+      x : 0,y : 0,
+      w : 10, h:10,
+      type: 2
+    };
+    var objNC = {
+      x : 30,y : 30,
+      w : 10, h:10,
+      type: 4
+    };
+
+    board.add(objRef);
+    board.add(objC);
+    board.add(objNC);
+
+    expect(board.collide(objRef,objC.type)).toBe(objC);
+    expect(board.collide(objRef,objNC.type)).toBeFalsy();
+
+    
+  });
 });
