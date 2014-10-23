@@ -209,7 +209,7 @@ var GameBoard = function() {
     	// Convertimos en un array args (1..)
     	var args = Array.prototype.slice.call(arguments,1);
 
-        this.objects.forEach(function(element){element[funcName].apply(element,args)});
+        this.objects.map(function(element){element[funcName].apply(element,args)});
 
         
     	
@@ -217,10 +217,12 @@ var GameBoard = function() {
 
     // Devuelve el primer objeto de objects para el que func es true
     this.detect = function(func) {
-    	for(var i = 0,val=null, len=this.objects.length; i < len; i++) {
-    	    if(func.call(this.objects[i])) return this.objects[i];
-    	}
-    	return false;
+
+        var arr = this.objects.filter(function(element){if(func.call(element))return element;});
+        
+        if(arr.length!= 0){return arr[0];}    
+        return false;
+        
     };
 
     // Cuando Game.loop() llame a step(), hay que llamar al método
