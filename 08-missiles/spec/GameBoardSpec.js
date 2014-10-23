@@ -54,5 +54,148 @@
     pueda identificar de qué tipo es cada objeto sprite almacenado en
     el tablero de juegos, pues cada objeto sólo quiere comprobar si ha
     colisionado con objetos de cierto tipo, no con todos los objetos.
-
+{}
 */
+describe("Clase GameBoard",function(){
+  beforeEach(function(){
+    loadFixtures('index.html');
+    canvas = $('#game')[0];
+    expect(canvas).toExist();
+    ctx = canvas.getContext('2d');
+    expect(ctx).toBeDefined();
+    oldGame = Game;
+    Game = {width: 320, height: 480};
+
+  });
+  afterEach(function(){
+    Game = oldGame;
+  });
+
+  it("Añade elementos a board",function(){
+    var board = new GameBoard();
+
+    spyOn(board,"add").andCallThrough();
+
+    var obj = new Object;
+
+    board.add(obj);
+    expect(board.add).toHaveBeenCalled();
+    expect(board.objects.length).toEqual(1);
+    expect(board.objects[0]).toBe(obj);
+  });
+
+  it("Elimina elementos a board",function(){
+    var board = new GameBoard();
+    spyOn(board,"remove").andCallThrough();
+    spyOn(board,"finalizeRemoved").andCallThrough();
+    spyOn(board,"resetRemoved").andCallThrough();
+    var obj = new Object;
+
+    board.add(obj);
+    board.resetRemoved();
+    board.remove(obj);
+
+    expect(board.remove).toHaveBeenCalled();
+    expect(board.removed.length).toEqual(1);
+    expect(board.removed[0]).toBe(obj);
+
+    board.finalizeRemoved();
+
+    expect(board.finalizeRemoved).toHaveBeenCalled();
+    board.resetRemoved();
+    expect(board.resetRemoved.calls.length).toEqual(2);
+    expect(board.removed.length).toEqual(0);
+  });
+
+
+  it("Usa draw y step de los elementos",function(){
+    
+    function obj(){
+      this.step = function (){};
+      this.draw = function (){}
+    }
+
+    var board = new GameBoard();
+
+    spyOn(board,"draw").andCallThrough();
+    spyOn(board,"step").andCallThrough();
+
+    Game = oldGame;
+    for(i=0;i<10;i++){
+      board.add(new obj);
+      spyOn(board.objects[i],"draw");
+      spyOn(board.objects[i],"step");
+    }
+    
+    
+
+    Game.initialize("game",sprites,function(){});  
+    Game.setBoard(1,board);
+
+    waits(100);
+    runs(function(){
+      expect(board.step).toHaveBeenCalled();
+      expect(board.draw).toHaveBeenCalled();
+      for(i=0;i<10;i++){
+        expect(board.objects[i].draw).toHaveBeenCalled();
+        expect(board.objects[i].step).toHaveBeenCalled();
+      } 
+    });
+
+  });
+
+  it("Detecta overlap",function(){
+    var board = new GameBoard();
+
+    var objRef = {
+      x : 0,y : 0,
+      w : 10, h:10
+     };
+    var objC = {
+      x : 0,y : 0,
+      w : 10, h:10
+    };
+    var objNC = {
+      x : 30,y : 30,
+      w : 10, h:10
+    };
+
+    board.add(objRef);
+    board.add(objC);
+    board.add(objNC);
+
+    expect(board.overlap(objRef,objC)).toBeTruthy();
+    expect(board.overlap(objRef,objNC)).toBeFalsy();
+  
+  });
+
+  it("Detecta colisiones",function(){
+
+    var board = new GameBoard();
+
+    var objRef = {
+      x : 0,y : 0,
+      w : 10, h:10,
+      type: 0
+     };
+    var objC = {
+      x : 0,y : 0,
+      w : 10, h:10,
+      type: 2
+    };
+    var objNC = {
+      x : 30,y : 30,
+      w : 10, h:10,
+      type: 4
+    };
+
+    board.add(objRef);
+    board.add(objC);
+    board.add(objNC);
+
+    expect(board.collide(objRef,objC.type)).toBe(objC);
+    expect(board.collide(objRef,objNC.type)).toBeFalsy();
+
+    
+  });
+});
