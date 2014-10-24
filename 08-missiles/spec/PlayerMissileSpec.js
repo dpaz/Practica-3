@@ -24,6 +24,35 @@
   - La clase PlayerMissile es la que implementa los misiles. Es
     importante que la creación de los misiles sea poco costosa pues va
     a haber muchos disparos, para lo cual se declararán los métodos de
-    la clase en el prototipo
+    la clase en el prototipo {} []
 
 */
+describe("Clase PlayerMissile",function(){
+
+  beforeEach(function(){
+    loadFixtures('index.html');
+    canvas = $('#game')[0];
+    expect(canvas).toExist();
+    ctx = canvas.getContext('2d');
+    expect(ctx).toBeDefined();
+    oldGame = Game;
+    Game = {width: 320, height: 480};
+
+  });
+  afterEach(function(){
+    Game = oldGame;
+  });
+
+
+  it("Los misiles se crean",function(){
+      Game = oldGame;
+      var board = new GameBoard();
+      var ship = new PlayerShip();
+      board.add(ship);
+      Game.keys['fire'] = true;
+      spyOn(board,'add');
+      ship.step(1);
+      expect(board.add).toHaveBeenCalledWith(new PlayerMissile(ship.x,ship.y+ship.h/2));
+      expect(board.add).toHaveBeenCalledWith(new PlayerMissile(ship.x+ship.w,ship.y+ship.h/2));
+  });
+});
