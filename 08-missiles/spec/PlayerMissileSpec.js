@@ -84,4 +84,26 @@ describe("Clase PlayerMissile",function(){
       expect(misil.y).toBe(-270);
   });
   
+  it("Hay que soltar el espacio para volver a disparar",function(){
+
+      Game = oldGame;
+      Game.initialize("game",sprites,function(){});
+
+      var board = new GameBoard();
+      var ship = new PlayerShip();
+
+      board.add(ship);
+      
+      Game.keys['fire'] = true;
+      ship.step(1);
+      expect(board.objects.length).toBe(3);
+      ship.step(1000000);
+      expect(board.objects.length).toBe(3);
+      Game.keys['fire'] = false;
+      ship.step(1);
+      Game.keys['fire'] = true;
+      ship.step(1);
+      expect(board.objects.length).toBe(5);
+  });
+
 });
