@@ -29,30 +29,59 @@
 */
 describe("Clase PlayerMissile",function(){
 
+  var canvas, ctx;
+
   beforeEach(function(){
     loadFixtures('index.html');
+
     canvas = $('#game')[0];
     expect(canvas).toExist();
+
     ctx = canvas.getContext('2d');
     expect(ctx).toBeDefined();
+    
     oldGame = Game;
-    Game = {width: 320, height: 480};
-
   });
+
   afterEach(function(){
     Game = oldGame;
-  });
+   }); 
 
 
   it("Los misiles se crean",function(){
       Game = oldGame;
+      Game.initialize("game",sprites,function(){});
+      
       var board = new GameBoard();
+      
       var ship = new PlayerShip();
+
       board.add(ship);
       Game.keys['fire'] = true;
       spyOn(board,'add');
+      misil1 = new PlayerMissile(ship.x,ship.y+ship.h/2);
+      
+      misil2 = new PlayerMissile(ship.x+ship.w,ship.y+ship.h/2);
+
       ship.step(1);
-      expect(board.add).toHaveBeenCalledWith(new PlayerMissile(ship.x,ship.y+ship.h/2));
-      expect(board.add).toHaveBeenCalledWith(new PlayerMissile(ship.x+ship.w,ship.y+ship.h/2));
+
+      expect(board.add).toHaveBeenCalledWith(misil1);
+      expect(board.add).toHaveBeenCalledWith(misil2);
+      
   });
+
+  it("Los misiles avanzan",function(){
+      Game = oldGame;
+      Game.initialize("game",sprites,function(){});
+
+      var board = new GameBoard();
+      misil = new PlayerMissile(140,440);
+
+      board.add(misil);
+      board.resetRemoved();
+      misil.step(1);
+      expect(misil.x).toBe(139);
+      expect(misil.y).toBe(-270);
+  });
+  
 });

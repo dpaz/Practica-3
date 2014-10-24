@@ -104,34 +104,36 @@ var PlayerShip = function() {
     this.reloadTime = 0.25;  // Un cuarto de segundo para poder volver a disparar
     this.reload = this.reloadTime;
 
-    this.ok = true;
-
     this.maxVel = 200;
 
+    this.ok = true;
+
     this.step = function(dt) {
-    	if(Game.keys['left']) { this.vx = -this.maxVel; }
-    	else if(Game.keys['right']) { this.vx = this.maxVel; }
-    	else { this.vx = 0; }
+	if(Game.keys['left']) { this.vx = -this.maxVel; }
+	else if(Game.keys['right']) { this.vx = this.maxVel; }
+	else { this.vx = 0; }
 
-    	this.x += this.vx * dt;
+	this.x += this.vx * dt;
 
-    	if(this.x < 0) { this.x = 0; }
-    	else if(this.x > Game.width - this.w) { 
-    	    this.x = Game.width - this.w 
-    	}
+	if(this.x < 0) { this.x = 0; }
+	else if(this.x > Game.width - this.w) { 
+	    this.x = Game.width - this.w 
+	}
 
-    	this.reload-=dt;
-    	if(Game.keys['fire' && this.reload < 0 && this.ok) {
-    	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
-    	    this.ok = false;
-    	    this.reload = this.reloadTime;
+	this.reload-=dt;
+    if(!Game.keys['fire']){
+        this.ok = true;
+    }
+	else if(Game.keys['fire'] && this.reload < 0 && this.ok) {
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    
+        this.ok = false;
+	    this.reload = this.reloadTime;
 
-    	    // Se añaden al gameboard 2 misiles 
-    	    this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
-    	    this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
-    	}else if(!Game.keys['fire']){
-            this.ok = true;
-        }
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
+	    this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
+	}
     }
 
     this.draw = function(ctx) {
@@ -154,6 +156,7 @@ var PlayerMissile = function(x,y) {
 
 PlayerMissile.prototype.step = function(dt)  {
     this.y += this.vy * dt;
+    
     if(this.y < -this.h) { this.board.remove(this); }
 };
 

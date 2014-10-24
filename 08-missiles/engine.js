@@ -184,7 +184,7 @@ var GameBoard = function() {
 
     // Marcar un objeto para borrar
     this.remove = function(obj) { 
-	this.removed.push(obj); 
+	   this.removed.push(obj); 
     };
 
     // Inicializar la lista de objetos pendientes de ser borrados
